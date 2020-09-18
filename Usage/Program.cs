@@ -56,7 +56,11 @@ namespace Usage
                     logger.LogInformation("Got {fn} item: {id}", nameof(client.Devices.GetMachinesAsync), item.GetRawText());
                     if (++count >= 20) break;
                 }
+
             }
+
+            // wait for log messages to flush
+            await Task.Delay(10);
         }
     }
 }
