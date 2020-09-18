@@ -91,6 +91,9 @@ namespace SlimAtp
 
             if (response.StatusCode == HttpStatusCode.NoContent || response.Content.Headers.ContentLength == 0)
             {
+                if (!response.IsSuccessStatusCode)
+                    throw HandleError(response.StatusCode, default);
+
                 logger.LogInformation("Got no content for HTTP request to {requestUri}.", requestUri);
                 return default;
             }
@@ -168,7 +171,7 @@ namespace SlimAtp
             {
             }
 
-            return new SlimAtpException(0, "Unkown error", "Unkown error");
+            return new SlimAtpException(statusCode, "Unkown error", "Unkown error");
         }
 
         private static void HandleNextLink(JsonElement root, ref string? nextLink)
