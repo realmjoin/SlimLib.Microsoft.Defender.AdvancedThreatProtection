@@ -21,10 +21,10 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: release
-        path: SlimGraph/bin/Release
+        path: SlimAtp/bin/Release
     - name: Push with dotnet nuget
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       run: |
-        $file = Get-ChildItem -File SlimGraph/bin/Release/SlimGraph.*.nupkg
+        $file = Get-ChildItem -File SlimAtp/bin/Release/SlimAtp.*.nupkg
         dotnet nuget push "$file" -s "https://api.nuget.org/v3/index.json" -k "$env:NUGET_API_KEY"
