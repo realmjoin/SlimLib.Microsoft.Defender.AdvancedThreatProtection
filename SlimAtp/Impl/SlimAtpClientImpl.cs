@@ -186,18 +186,6 @@ namespace SlimAtp
             }
         }
 
-        private static void HandleDeltaLink(JsonElement root, ref string? deltaLink)
-        {
-            if (root.TryGetProperty("@odata.deltaLink", out var el))
-            {
-                deltaLink = el.GetString();
-            }
-            else
-            {
-                deltaLink = null;
-            }
-        }
-
         private string BuildLink(ScalarRequestOptions? options, string call)
         {
             var args = new List<string>();
