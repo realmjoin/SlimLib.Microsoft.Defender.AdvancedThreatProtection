@@ -14,6 +14,7 @@ namespace SlimAtp
         }
 
         public ISlimAtpMachineClient Machine => impl;
+        public ISlimAtpUserClient User => impl;
         public ISlimAtpSoftwareClient Software => impl;
     }
 }

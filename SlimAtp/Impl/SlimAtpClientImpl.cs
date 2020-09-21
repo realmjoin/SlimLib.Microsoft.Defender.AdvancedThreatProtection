@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SlimAtp
 {
-    internal sealed partial class SlimAtpClientImpl : ISlimAtpMachineClient, ISlimAtpSoftwareClient
+    internal sealed partial class SlimAtpClientImpl : ISlimAtpMachineClient, ISlimAtpUserClient, ISlimAtpSoftwareClient
     {
         private readonly IAuthenticationProvider authenticationProvider;
         private readonly HttpClient httpClient;
