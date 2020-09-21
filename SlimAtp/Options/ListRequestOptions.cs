@@ -5,7 +5,11 @@ namespace SlimAtp
 {
     public class ListRequestOptions
     {
-        public ListRequestOptions(EventHandler<MetadataEventArgs> handler)
+        public ListRequestOptions()
+        {
+        }
+
+        public ListRequestOptions(EventHandler<MetadataEventArgs> handler) : this()
         {
             if (handler is null) throw new ArgumentNullException(nameof(handler));
 
