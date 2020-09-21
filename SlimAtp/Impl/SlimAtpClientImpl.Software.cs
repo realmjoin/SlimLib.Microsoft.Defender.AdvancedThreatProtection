@@ -1,5 +1,4 @@
 ﻿using SlimAtp.Auth;
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -10,7 +9,7 @@ namespace SlimAtp
 {
     partial class SlimAtpClientImpl
     {
-        async Task<JsonElement> ISlimAtpSoftwareClient.GetSoftwareAsync(IAzureTenant tenant, Guid id, ScalarRequestOptions? options, CancellationToken cancellationToken)
+        async Task<JsonElement> ISlimAtpSoftwareClient.GetSoftwareAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options, CancellationToken cancellationToken)
         {
             var link = BuildLink(options, $"software/{id}");
 
