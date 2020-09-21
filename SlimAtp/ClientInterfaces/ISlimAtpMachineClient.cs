@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SlimAtp
 {
-    public interface ISlimAtpMachinesClient
+    public interface ISlimAtpMachineClient
     {
-        Task<JsonElement> GetMachineAsync(IAzureTenant tenant, Guid deviceID, ScalarRequestOptions? options = default, CancellationToken cancellationToken = default);
+        Task<JsonElement> GetMachineAsync(IAzureTenant tenant, Guid id, ScalarRequestOptions? options = default, CancellationToken cancellationToken = default);
 
         IAsyncEnumerable<JsonElement> GetMachinesAsync(IAzureTenant tenant, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
     }

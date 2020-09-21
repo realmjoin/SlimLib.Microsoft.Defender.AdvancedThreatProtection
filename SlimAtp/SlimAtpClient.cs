@@ -13,6 +13,6 @@ namespace SlimAtp
             impl = new SlimAtpClientImpl(authenticationProvider, httpClient, logger);
         }
 
-        public ISlimAtpMachinesClient Devices => impl;
+        public ISlimAtpMachineClient Machine => impl;
     }
 }

@@ -50,10 +50,10 @@ namespace Usage
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
                 var count = 0;
-                await foreach (var item in client.Devices.GetMachinesAsync(tenant))
+                await foreach (var item in client.Machine.GetMachinesAsync(tenant))
                 {
                     // Since $top = 10 is set, each page will have at most 10 items. This means GetMachinesAsync will execute two HTTP calls.
-                    logger.LogInformation("Got {fn} item: {id}", nameof(client.Devices.GetMachinesAsync), item.GetRawText());
+                    logger.LogInformation("Got {fn} item: {id}", nameof(client.Machine.GetMachinesAsync), item.GetRawText());
                     if (++count >= 20) break;
                 }
 

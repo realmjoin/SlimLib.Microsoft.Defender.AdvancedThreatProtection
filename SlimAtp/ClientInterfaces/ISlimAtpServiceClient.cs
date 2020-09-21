@@ -2,6 +2,6 @@
 {
     public interface ISlimAtpClient
     {
-        ISlimAtpMachinesClient Devices { get; }
+        ISlimAtpMachineClient Machine { get; }
     }
 }

@@ -10,14 +10,14 @@ namespace SlimAtp
 {
     partial class SlimAtpClientImpl
     {
-        async Task<JsonElement> ISlimAtpMachinesClient.GetMachineAsync(IAzureTenant tenant, Guid id, ScalarRequestOptions? options, CancellationToken cancellationToken)
+        async Task<JsonElement> ISlimAtpMachineClient.GetMachineAsync(IAzureTenant tenant, Guid id, ScalarRequestOptions? options, CancellationToken cancellationToken)
         {
             var link = BuildLink(options, $"machines/{id}");
 
             return await GetAsync(tenant, link, new RequestHeaderOptions(), cancellationToken).ConfigureAwait(false);
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachinesClient.GetMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.GetMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, "machines");
 
