@@ -5,13 +5,13 @@ namespace SlimAtp
 {
     public class SlimAtpException : Exception
     {
-        internal SlimAtpException(HttpStatusCode httpStatusCode, string graphErrorCode, string graphErrorMessage) : base(graphErrorMessage)
+        internal SlimAtpException(HttpStatusCode httpStatusCode, string? errorCode, string? errorMessage) : base(errorMessage)
         {
             HttpStatusCode = httpStatusCode;
-            GraphErrorCode = graphErrorCode;
+            ErrorCode = errorCode;
         }
 
         public HttpStatusCode HttpStatusCode { get; }
-        public string GraphErrorCode { get; }
+        public string? ErrorCode { get; }
     }
 }

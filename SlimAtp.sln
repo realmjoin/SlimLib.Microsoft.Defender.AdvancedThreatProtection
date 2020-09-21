@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{0A81CA4C-491E-4F71-9738-7BAEB809F671}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build.yml = .github\workflows\build.yml
-		.github\workflows\publish.yml.disabled = .github\workflows\publish.yml.disabled
+		.github\workflows\publish.yml = .github\workflows\publish.yml
 	EndProjectSection
 EndProject
 Project("{1144DB4F-A55E-40A5-92A9-B98F60430587}") = "Usage", "Usage\Usage.csproj", "{D3DDBD51-FD49-4815-B66C-BD274E746999}"
