@@ -17,7 +17,7 @@ namespace SlimAtp
             return await GetAsync(tenant, link, new RequestHeaderOptions(), cancellationToken).ConfigureAwait(false);
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.GetMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, "machines");
 

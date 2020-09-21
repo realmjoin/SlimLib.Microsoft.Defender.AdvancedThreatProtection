@@ -11,6 +11,6 @@ namespace SlimAtp
     {
         Task<JsonElement> GetMachineAsync(IAzureTenant tenant, Guid id, ScalarRequestOptions? options = default, CancellationToken cancellationToken = default);
 
-        IAsyncEnumerable<JsonElement> GetMachinesAsync(IAzureTenant tenant, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<JsonElement> ListMachinesAsync(IAzureTenant tenant, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
     }
 }
