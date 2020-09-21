@@ -43,13 +43,23 @@ namespace SlimAtp
         {
             string? link = nextLink;
 
-            var reqOptions = new RequestHeaderOptions { ConsistencyLevelEventual = options?.ConsistencyLevelEventual ?? false };
+            var reqOptions = new RequestHeaderOptions
+            {
+                ConsistencyLevelEventual = options?.ConsistencyLevelEventual ?? false,
+                MaxPageSize = options?.MaxPageSize,
+            };
 
             do
             {
                 var root = await GetAsync(tenant, link, reqOptions, cancellationToken).ConfigureAwait(false);
 
                 options?.OnPageReceived(root);
+
+                if (link == nextLink)
+                {
+                    // First page
+                    options?.OnMetadataReceived(root);
+                }
 
                 foreach (var item in root.GetProperty("value").EnumerateArray())
                 {
@@ -137,25 +147,19 @@ namespace SlimAtp
                 request.Headers.Add("ConsistencyLevel", "eventual");
             }
 
-            if (options?.PreferMinimal == true)
+            if (options?.Return > ReturnOptions.Unspecified)
             {
-                logger.LogDebug("Setting HTTP header Prefer: return=minimal");
-                request.Headers.Add("Prefer", "return=minimal");
+                logger.LogDebug("Setting HTTP header Prefer: return=" + options.Return.ToString().ToLowerInvariant());
+                request.Headers.Add("Prefer", "return=" + options.Return.ToString().ToLowerInvariant());
             }
 
-            var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-            if (options?.PreferMinimal == true)
+            if (options?.MaxPageSize >= 0)
             {
-                if (!response.Headers.TryGetValues("Preference-Applied", out var values) || !values.Any(x => x == "return=minimal"))
-                {
-                    throw new InvalidOperationException("Prefer return=minimal was applied, but the Graph did not honor our request and returned a full response.");
-                }
-
-                logger.LogDebug("Received HTTP header Preference-Applied: return=minimal");
+                logger.LogDebug("Setting HTTP header Prefer: maxpagesize=" + options.MaxPageSize);
+                request.Headers.Add("Prefer", "maxpagesize=" + options.MaxPageSize);
             }
 
-            return response;
+            return await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
         private static SlimAtpException HandleError(HttpStatusCode statusCode, JsonElement root)

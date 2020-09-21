@@ -30,6 +30,7 @@ namespace Usage
                 builder
                     .AddFilter("Microsoft", LogLevel.Warning)
                     .AddFilter("System", LogLevel.Warning)
+                    .AddFilter("System.Net.Http.HttpClient", LogLevel.Information)
                     .AddFilter("SlimAtp", LogLevel.Trace)
                     .AddConsole();
             });
@@ -49,18 +50,29 @@ namespace Usage
                 var client = scope.ServiceProvider.GetRequiredService<ISlimAtpClient>();
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-                var count = 0;
-                await foreach (var item in client.Machine.ListMachinesAsync(tenant))
+                // This ctor is a helper for getting the new metadata.
+                // See: https://developer.microsoft.com/en-us/identity/blogs/build-advanced-queries-with-count-filter-search-and-orderby/
+                var options = new ListRequestOptions(Options_MetadataReceived) { MaxPageSize = 2, Top = 4 };
+
+                void Options_MetadataReceived(object? sender, MetadataEventArgs e)
                 {
-                    // Since $top = 10 is set, each page will have at most 10 items. This means GetMachinesAsync will execute two HTTP calls.
-                    logger.LogInformation("Got {fn} item: {id}", nameof(client.Machine.ListMachinesAsync), item.GetRawText());
-                    if (++count >= 20) break;
+                    logger.LogInformation($"Metadata received: {(e.Context, e.Count)}");
                 }
 
+                var count = 0;
+                await foreach (var item in client.Machine.ListMachinesAsync(tenant, options))
+                {
+                    count++;
+
+                    // MaxPageSize = 2 is set, each page will have at most 2 items.
+                    // Top = 4 is set, the server SHOULD stop after 2 pages.
+                    logger.LogInformation("Got item {count}: {json}", count, item.GetRawText());
+                    if (count >= options.Top) break;
+                }
             }
 
-            // wait for log messages to flush
-            await Task.Delay(10);
+            // Wait for log messages to flush
+            await Task.Delay(100);
         }
     }
 }

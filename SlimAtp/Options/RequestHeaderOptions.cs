@@ -2,7 +2,8 @@
 {
     public class RequestHeaderOptions
     {
-        public bool PreferMinimal { get; set; }
+        public ReturnOptions Return { get; set; }
         public bool ConsistencyLevelEventual { get; set; }
+        public int? MaxPageSize { get; set; }
     }
 }
