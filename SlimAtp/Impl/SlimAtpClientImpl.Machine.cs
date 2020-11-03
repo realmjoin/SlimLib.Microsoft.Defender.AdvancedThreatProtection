@@ -55,5 +55,44 @@ namespace SlimAtp
                 yield return item;
             }
         }
+
+        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineRecommendationsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            var nextLink = BuildLink(options, $"machines/{id}/recommendations");
+
+            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    yield break;
+
+                yield return item;
+            }
+        }
+
+        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineAlertsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            var nextLink = BuildLink(options, $"machines/{id}/alerts");
+
+            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    yield break;
+
+                yield return item;
+            }
+        }
+
+        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            var nextLink = BuildLink(options, $"machines/{id}/vulnerabilities");
+
+            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    yield break;
+
+                yield return item;
+            }
+        }
     }
 }
