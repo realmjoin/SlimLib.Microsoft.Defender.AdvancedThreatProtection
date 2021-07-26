@@ -14,11 +14,11 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: 5.0.x
     - name: Pack with dotnet
-      run: dotnet pack --configuration Release
+      run: dotnet pack --include-symbols --configuration Release
     - name: Upload artifact
       uses: actions/upload-artifact@v1
       with:
         name: release
-        path: SlimAtp/bin/Release
+        path: SlimLib.Microsoft.Defender.AdvancedThreatProtection/bin/Release

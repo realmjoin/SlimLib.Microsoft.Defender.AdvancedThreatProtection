@@ -14,17 +14,17 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: 5.0.x
     - name: Pack with dotnet
-      run: dotnet pack --configuration Release
+      run: dotnet pack --include-symbols --configuration Release
     - name: Upload artifact
       uses: actions/upload-artifact@v1
       with:
         name: release
-        path: SlimAtp/bin/Release
+        path: SlimLib.Microsoft.Defender.AdvancedThreatProtection/bin/Release
     - name: Push with dotnet nuget
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       run: |
-        $file = Get-ChildItem -File SlimAtp/bin/Release/SlimAtp.*.nupkg
+        $file = Get-ChildItem -File SlimLib.Microsoft.Defender.AdvancedThreatProtection/bin/Release/SlimLib.Microsoft.Defender.AdvancedThreatProtection.*.symbols.nupkg
         dotnet nuget push "$file" -s "https://api.nuget.org/v3/index.json" -k "$env:NUGET_API_KEY"

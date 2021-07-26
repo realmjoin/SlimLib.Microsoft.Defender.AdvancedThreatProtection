@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{0FCAB578-2C60-43C6-ADE6-C5C828630393}") = "SlimLib.Microsoft.Defender.AdvancedThreatProtection", "SlimLib.Microsoft.Defender.AdvancedThreatProtection\SlimLib.Microsoft.Defender.AdvancedThreatProtection.csproj", "{BC76FD79-540C-4979-AC77-32775731F1D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{75AB688E-B7F9-4924-B413-1ACFA9BB3948}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{0A81CA4C-491E-4F71-9738-7BAEB809F671}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
+Project("{1144DB4F-A55E-40A5-92A9-B98F60430587}") = "Usage", "Usage\Usage.csproj", "{D3DDBD51-FD49-4815-B66C-BD274E746999}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC76FD79-540C-4979-AC77-32775731F1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC76FD79-540C-4979-AC77-32775731F1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC76FD79-540C-4979-AC77-32775731F1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC76FD79-540C-4979-AC77-32775731F1D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3DDBD51-FD49-4815-B66C-BD274E746999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3DDBD51-FD49-4815-B66C-BD274E746999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3DDBD51-FD49-4815-B66C-BD274E746999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3DDBD51-FD49-4815-B66C-BD274E746999}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0A81CA4C-491E-4F71-9738-7BAEB809F671} = {75AB688E-B7F9-4924-B413-1ACFA9BB3948}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA2E315D-A53F-4254-B52C-93D9540C094D}
+	EndGlobalSection
+EndGlobal
