@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UserSecretsId>23fd32d9-0516-4edf-935d-76a27335bb9c</UserSecretsId>
+    <UserSecretsId>ce9ac440-2dce-4022-8290-673dc69c70aa</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
