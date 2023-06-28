@@ -40,7 +40,7 @@ namespace Usage
             Configuration.GetSection("AzureAD").Bind(clientCredentials);
 
             services.AddMemoryCache();
-            services.AddTransient<IAuthenticationProvider>(sp => new AzureAuthenticationClient(clientCredentials, sp.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(AzureAuthenticationClient)), sp.GetService<IMemoryCache>()));
+            services.AddTransient<IAuthenticationProvider>(sp => new CachingAzureAuthenticationClient(clientCredentials, sp.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(CachingAzureAuthenticationClient)), sp.GetRequiredService<IMemoryCache>()));
             services.AddHttpClient<ISlimAtpClient, SlimAtpClient>(client => client.BaseAddress = new Uri(SlimAtpConstants.Endpoint)).AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(500)));
 
             var container = services.BuildServiceProvider();
