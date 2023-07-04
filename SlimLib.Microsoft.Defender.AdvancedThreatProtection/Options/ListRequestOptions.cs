@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
@@ -18,11 +19,11 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             MetadataReceived = handler;
         }
 
-        public string? Select { get; set; }
+        public HashSet<string> Select { get; } = new();
         public string? Filter { get; set; }
         public string? Search { get; set; }
         public string? Expand { get; set; }
-        public string? OrderBy { get; set; }
+        public HashSet<string> OrderBy { get; } = new();
         public bool? Count { get; set; }
         public int? Skip { get; set; }
         public int? Top { get; set; }

@@ -1,8 +1,10 @@
-﻿namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
+﻿using System.Collections.Generic;
+
+namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
 {
     public class ScalarRequestOptions
     {
-        public string? Select { get; set; }
+        public HashSet<string> Select { get; } = new();
         public string? Expand { get; set; }
     }
 }
