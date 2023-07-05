@@ -194,7 +194,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
         {
             var args = new List<string>();
 
-            if (options?.Select != null)
+            if (options?.Select.Count > 0)
                 args.Add("$select=" + Uri.EscapeDataString(string.Join(",", options.Select)));
 
             if (options?.Expand != null)
@@ -207,7 +207,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
         {
             var args = new List<string>();
 
-            if (options?.Select != null)
+            if (options?.Select.Count > 0)
                 args.Add("$select=" + Uri.EscapeDataString(string.Join(",", options.Select)));
 
             if (options?.Filter != null)
@@ -219,7 +219,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             if (options?.Expand != null)
                 args.Add("$expand=" + Uri.EscapeDataString(options.Expand));
 
-            if (options?.OrderBy != null)
+            if (options?.OrderBy.Count > 0)
                 args.Add("$orderby=" + Uri.EscapeDataString(string.Join(",", options.OrderBy)));
 
             if (options?.Count != null)
