@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
+using SlimLib;
 using SlimLib.Auth.Azure;
 using SlimLib.Microsoft.Defender.AdvancedThreatProtection;
 using System;
@@ -50,17 +51,10 @@ namespace Usage
                 var client = scope.ServiceProvider.GetRequiredService<ISlimAtpClient>();
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-                // This ctor is a helper for getting the new metadata.
-                // See: https://developer.microsoft.com/en-us/identity/blogs/build-advanced-queries-with-count-filter-search-and-orderby/
-                var options = new ListRequestOptions(Options_MetadataReceived) { MaxPageSize = 2, Top = 4 };
-
-                void Options_MetadataReceived(object? sender, MetadataEventArgs e)
-                {
-                    logger.LogInformation($"Metadata received: {(e.Context, e.Count)}");
-                }
+                var options = new ListRequestOptions() { MaxPageSize = 2, Top = 4 };
 
                 var count = 0;
-                await foreach (var item in client.Machine.ListMachinesAsync(tenant, options))
+                await foreach (var item in client.Machine.ListMachinesAsync(tenant, options).AsJsonElements())
                 {
                     count++;
 

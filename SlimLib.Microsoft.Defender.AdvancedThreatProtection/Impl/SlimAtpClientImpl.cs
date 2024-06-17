@@ -27,104 +27,86 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             this.logger = logger;
         }
 
-        private Task<JsonElement> DeleteAsync(IAzureTenant tenant, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
-            => SendAsync(tenant, HttpMethod.Delete, null, requestUri, options, cancellationToken);
+        private async Task DeleteAsync(IAzureTenant tenant, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
+        {
+            using var doc = await SendAsync(tenant, HttpMethod.Delete, null, requestUri, options, cancellationToken).ConfigureAwait(false);
+        }
 
-        private Task<JsonElement> GetAsync(IAzureTenant tenant, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
+        private Task<JsonDocument?> GetAsync(IAzureTenant tenant, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
             => SendAsync(tenant, HttpMethod.Get, null, requestUri, options, cancellationToken);
 
-        private Task<JsonElement> PatchAsync(IAzureTenant tenant, ReadOnlyMemory<byte> utf8Data, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
+        private Task<JsonDocument?> PatchAsync(IAzureTenant tenant, ReadOnlyMemory<byte> utf8Data, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
             => SendAsync(tenant, HttpMethod.Patch, utf8Data, requestUri, options, cancellationToken);
 
-        private Task<JsonElement> PostAsync(IAzureTenant tenant, ReadOnlyMemory<byte> utf8Data, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
+        private Task<JsonDocument?> PostAsync(IAzureTenant tenant, ReadOnlyMemory<byte> utf8Data, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
             => SendAsync(tenant, HttpMethod.Post, utf8Data, requestUri, options, cancellationToken);
 
-        private async IAsyncEnumerable<JsonElement> GetArrayAsync(IAzureTenant tenant, string nextLink, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<JsonDocument> GetArrayAsync(IAzureTenant tenant, string nextLink, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             string? link = nextLink;
 
-            var reqOptions = new RequestHeaderOptions
-            {
-                ConsistencyLevelEventual = options?.ConsistencyLevelEventual ?? false,
-                MaxPageSize = options?.MaxPageSize,
-            };
+            var reqOptions = new RequestHeaderOptions { ConsistencyLevelEventual = options?.ConsistencyLevelEventual ?? false };
 
             do
             {
-                var root = await GetAsync(tenant, link, reqOptions, cancellationToken).ConfigureAwait(false);
+                var doc = await GetAsync(tenant, link, reqOptions, cancellationToken).ConfigureAwait(false);
 
-                options?.OnPageReceived(root);
-
-                if (link == nextLink)
+                if (doc is not null)
                 {
-                    // First page
-                    options?.OnMetadataReceived(root);
+                    HandleNextLink(doc.RootElement, ref link);
+                    yield return doc;
                 }
-
-                foreach (var item in root.GetProperty("value").EnumerateArray())
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                        yield break;
-
-                    yield return item;
-                }
-
-                HandleNextLink(root, ref link);
 
             } while (link != null);
         }
 
-        private async IAsyncEnumerable<JsonElement> PostArrayAsync(IAzureTenant tenant, ReadOnlyMemory<byte> utf8Data, string nextLink, RequestHeaderOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<JsonDocument> PostArrayAsync(IAzureTenant tenant, ReadOnlyMemory<byte> utf8Data, string nextLink, RequestHeaderOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            string? nLink = nextLink;
+            string? link = nextLink;
 
             do
             {
-                var root = await PostAsync(tenant, utf8Data, nLink, options, cancellationToken).ConfigureAwait(false);
+                var doc = await PostAsync(tenant, utf8Data, link, options, cancellationToken).ConfigureAwait(false);
 
-                foreach (var item in root.GetProperty("value").EnumerateArray())
+                if (doc is not null)
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                        yield break;
-
-                    yield return item;
+                    HandleNextLink(doc.RootElement, ref link);
+                    yield return doc;
                 }
 
-                HandleNextLink(root, ref nLink);
-
-            } while (nLink != null);
+            } while (link != null);
         }
 
-        private async Task<JsonElement> SendAsync(IAzureTenant tenant, HttpMethod method, ReadOnlyMemory<byte>? utf8Data, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
+        private async Task<JsonDocument?> SendAsync(IAzureTenant tenant, HttpMethod method, ReadOnlyMemory<byte>? utf8Data, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
         {
             using var response = await SendInternalAsync(tenant, method, utf8Data, requestUri, options, cancellationToken);
 
             if (response.StatusCode == HttpStatusCode.NoContent || response.Content.Headers.ContentLength == 0)
             {
-                if (!response.IsSuccessStatusCode)
-                    throw HandleError(response.StatusCode, default);
-
                 logger.LogInformation("Got no content for HTTP request to {requestUri}.", requestUri);
-                return default;
+                return null;
             }
 
             using var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-            var root = await JsonSerializer.DeserializeAsync<JsonElement>(content, cancellationToken: cancellationToken);
+            var doc = await JsonSerializer.DeserializeAsync<JsonDocument>(content, cancellationToken: cancellationToken);
 
             if (!response.IsSuccessStatusCode)
-                throw HandleError(response.StatusCode, root);
+                throw HandleError(response.StatusCode, response.Headers, doc);
 
-            if (root.TryGetProperty("value", out var items) && items.ValueKind == JsonValueKind.Array)
+            if (doc is not null)
             {
-                logger.LogInformation("Got {count} items for HTTP request to {requestUri}.", items.GetArrayLength(), requestUri);
-            }
-            else
-            {
-                logger.LogInformation("Got single item for HTTP request to {requestUri}.", requestUri);
+                if (doc.RootElement.TryGetProperty("value", out var items) && items.ValueKind == JsonValueKind.Array)
+                {
+                    logger.LogInformation("Got {count} items for HTTP request to {requestUri}.", items.GetArrayLength(), requestUri);
+                }
+                else
+                {
+                    logger.LogInformation("Got single item for HTTP request to {requestUri}.", requestUri);
+                }
             }
 
-            return root;
+            return doc;
         }
 
         private async Task<HttpResponseMessage> SendInternalAsync(IAzureTenant tenant, HttpMethod method, ReadOnlyMemory<byte>? utf8Data, string requestUri, RequestHeaderOptions? options, CancellationToken cancellationToken)
@@ -162,11 +144,11 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             return await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
-        private static SlimAtpException HandleError(HttpStatusCode statusCode, JsonElement root)
+        private static SlimAtpException HandleError(HttpStatusCode statusCode, HttpResponseHeaders headers, JsonDocument? root)
         {
             try
             {
-                if (root.TryGetProperty("error", out var error))
+                if (root?.RootElement.TryGetProperty("error", out var error) == true)
                 {
                     return new SlimAtpException(statusCode, error.GetProperty("code").GetString(), error.GetProperty("message").GetString());
                 }

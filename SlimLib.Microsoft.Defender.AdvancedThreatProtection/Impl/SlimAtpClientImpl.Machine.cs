@@ -9,7 +9,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
 {
     partial class SlimAtpClientImpl
     {
-        async Task<JsonElement> ISlimAtpMachineClient.GetMachineAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options, CancellationToken cancellationToken)
+        async Task<JsonDocument?> ISlimAtpMachineClient.GetMachineAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options, CancellationToken cancellationToken)
         {
             var link = BuildLink(options, $"machines/{id}");
 
@@ -17,7 +17,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
         }
 
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, "machines");
 
@@ -30,7 +30,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineLogOnUsersAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineLogOnUsersAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"machines/{id}/logonusers");
 
@@ -43,7 +43,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineSoftwareAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineSoftwareAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"machines/{id}/software");
 
@@ -56,7 +56,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineRecommendationsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineRecommendationsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"machines/{id}/recommendations");
 
@@ -69,7 +69,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineAlertsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineAlertsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"machines/{id}/alerts");
 
@@ -82,7 +82,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpMachineClient.ListMachineVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"machines/{id}/vulnerabilities");
 

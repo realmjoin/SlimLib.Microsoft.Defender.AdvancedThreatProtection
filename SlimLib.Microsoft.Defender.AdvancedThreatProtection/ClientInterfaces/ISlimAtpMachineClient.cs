@@ -8,14 +8,14 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
 {
     public interface ISlimAtpMachineClient
     {
-        Task<JsonElement> GetMachineAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options = default, CancellationToken cancellationToken = default);
+        Task<JsonDocument?> GetMachineAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options = default, CancellationToken cancellationToken = default);
 
-        IAsyncEnumerable<JsonElement> ListMachinesAsync(IAzureTenant tenant, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<JsonDocument> ListMachinesAsync(IAzureTenant tenant, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
 
-        IAsyncEnumerable<JsonElement> ListMachineLogOnUsersAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
-        IAsyncEnumerable<JsonElement> ListMachineSoftwareAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
-        IAsyncEnumerable<JsonElement> ListMachineRecommendationsAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
-        IAsyncEnumerable<JsonElement> ListMachineAlertsAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
-        IAsyncEnumerable<JsonElement> ListMachineVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<JsonDocument> ListMachineLogOnUsersAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<JsonDocument> ListMachineSoftwareAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<JsonDocument> ListMachineRecommendationsAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<JsonDocument> ListMachineAlertsAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<JsonDocument> ListMachineVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options = default, CancellationToken cancellationToken = default);
     }
 }

@@ -9,14 +9,14 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
 {
     partial class SlimAtpClientImpl
     {
-        async Task<JsonElement> ISlimAtpSoftwareClient.GetSoftwareAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options, CancellationToken cancellationToken)
+        async Task<JsonDocument?> ISlimAtpSoftwareClient.GetSoftwareAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options, CancellationToken cancellationToken)
         {
             var link = BuildLink(options, $"software/{id}");
 
             return await GetAsync(tenant, link, new RequestHeaderOptions(), cancellationToken).ConfigureAwait(false);
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpSoftwareClient.ListSoftwareAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpSoftwareClient.ListSoftwareAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, "software");
 
@@ -29,7 +29,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpSoftwareClient.ListSoftwareDistributionsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpSoftwareClient.ListSoftwareDistributionsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"software/{id}/distributions");
 
@@ -42,7 +42,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpSoftwareClient.ListSoftwareMachinesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpSoftwareClient.ListSoftwareMachinesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"software/{id}/machineReferences");
 
@@ -55,7 +55,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpSoftwareClient.ListSoftwareMissingSecurityUpdatesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpSoftwareClient.ListSoftwareMissingSecurityUpdatesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"software/{id}/getmissingkbs");
 
@@ -68,7 +68,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        async IAsyncEnumerable<JsonElement> ISlimAtpSoftwareClient.ListSoftwareVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpSoftwareClient.ListSoftwareVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"software/{id}/vulnerabilities");
 

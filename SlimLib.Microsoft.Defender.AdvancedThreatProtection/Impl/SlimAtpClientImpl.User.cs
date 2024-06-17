@@ -8,7 +8,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
 {
     partial class SlimAtpClientImpl
     {
-        async IAsyncEnumerable<JsonElement> ISlimAtpUserClient.ListUserMachinesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<JsonDocument> ISlimAtpUserClient.ListUserMachinesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var nextLink = BuildLink(options, $"users/{id}/machines");
 
