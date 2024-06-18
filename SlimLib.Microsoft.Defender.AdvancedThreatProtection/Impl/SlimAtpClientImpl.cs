@@ -94,18 +94,6 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             if (!response.IsSuccessStatusCode)
                 throw HandleError(response.StatusCode, response.Headers, doc);
 
-            if (doc is not null)
-            {
-                if (doc.RootElement.TryGetProperty("value", out var items) && items.ValueKind == JsonValueKind.Array)
-                {
-                    logger.LogInformation("Got {count} items for HTTP request to {requestUri}.", items.GetArrayLength(), requestUri);
-                }
-                else
-                {
-                    logger.LogInformation("Got single item for HTTP request to {requestUri}.", requestUri);
-                }
-            }
-
             return doc;
         }
 
