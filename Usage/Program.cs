@@ -36,7 +36,7 @@ namespace Usage
                     .AddConsole();
             });
 
-            var tenant = new AzureTenant(Configuration.GetValue<string>("Tenant"));
+            var tenant = new AzureTenant(Configuration.GetValue<string>("Tenant")!);
             var clientCredentials = new AzureClientCredentials();
             Configuration.GetSection("AzureAD").Bind(clientCredentials);
 
