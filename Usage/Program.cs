@@ -54,7 +54,7 @@ namespace Usage
                 var options = new ListRequestOptions() { MaxPageSize = 2, Top = 4 };
 
                 var count = 0;
-                await foreach (var item in client.Machine.ListMachinesAsync(tenant, options).AsJsonElements())
+                await foreach (var item in client.Machine.ListMachinesAsync(tenant, options).AsJsonElementsAsync())
                 {
                     count++;
 
