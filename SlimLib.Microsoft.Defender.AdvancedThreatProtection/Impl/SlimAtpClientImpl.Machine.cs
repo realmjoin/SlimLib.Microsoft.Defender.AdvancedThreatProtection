@@ -13,7 +13,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
         {
             var link = BuildLink(options, $"machines/{id}");
 
-            return await GetAsync(tenant, link, new RequestHeaderOptions(), cancellationToken).ConfigureAwait(false);
+            return await GetAsync(tenant, link, new InvokeRequestOptions(), cancellationToken).ConfigureAwait(false);
         }
 
 

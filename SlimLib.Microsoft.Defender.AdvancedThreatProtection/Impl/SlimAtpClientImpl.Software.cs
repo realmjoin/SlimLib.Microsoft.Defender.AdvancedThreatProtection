@@ -13,7 +13,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
         {
             var link = BuildLink(options, $"software/{id}");
 
-            return await GetAsync(tenant, link, new RequestHeaderOptions(), cancellationToken).ConfigureAwait(false);
+            return await GetAsync(tenant, link, new InvokeRequestOptions(), cancellationToken).ConfigureAwait(false);
         }
 
         async IAsyncEnumerable<JsonDocument> ISlimAtpSoftwareClient.ListSoftwareAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
