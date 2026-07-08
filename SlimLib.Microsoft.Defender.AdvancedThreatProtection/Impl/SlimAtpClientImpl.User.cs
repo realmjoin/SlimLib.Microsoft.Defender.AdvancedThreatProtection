@@ -1,24 +1,16 @@
-﻿using SlimLib.Auth.Azure;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using SlimLib.Auth.Azure;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 
-namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
+namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection;
+
+partial class SlimAtpClientImpl
 {
-    partial class SlimAtpClientImpl
+    GraphArrayOperation<JsonDocument> ISlimAtpUserClient.GetUserMachinesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, CancellationToken cancellationToken)
     {
-        async IAsyncEnumerable<JsonDocument> ISlimAtpUserClient.ListUserMachinesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            var nextLink = BuildLink(options, $"users/{id}/machines");
+        var nextLink = BuildLink(options, $"users/{id}/machines");
 
-            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
-
-                yield return item;
-            }
-        }
+        return new(this, tenant, HttpMethod.Get, nextLink, options, default, static doc => doc);
     }
 }

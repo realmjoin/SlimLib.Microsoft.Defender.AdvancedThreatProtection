@@ -252,11 +252,11 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             }
         }
 
-        private string BuildLink(ScalarRequestOptions? options, string call)
+        private static string BuildLink(ScalarRequestOptions? options, string call)
         {
             var args = new List<string>();
 
-            if (options?.Select.Count > 0)
+            if (options?.Select != null)
                 args.Add("$select=" + Uri.EscapeDataString(string.Join(",", options.Select)));
 
             if (options?.Expand != null)
@@ -265,7 +265,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             return RequestOptions.BuildLink(call, args);
         }
 
-        private string BuildLink(ListRequestOptions? options, string call)
+        private static string BuildLink(ListRequestOptions? options, string call)
         {
             var args = new List<string>();
 
@@ -296,7 +296,7 @@ namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
             return RequestOptions.BuildLink(call, args);
         }
 
-        private string BuildLink(InvokeRequestOptions? options, string call)
+        private static string BuildLink(InvokeRequestOptions? options, string call)
         {
             return RequestOptions.BuildLink(call, Enumerable.Empty<string>());
         }

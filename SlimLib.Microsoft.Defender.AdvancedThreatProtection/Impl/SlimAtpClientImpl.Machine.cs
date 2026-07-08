@@ -1,98 +1,58 @@
-﻿using SlimLib.Auth.Azure;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using SlimLib.Auth.Azure;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
+namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection;
+
+partial class SlimAtpClientImpl
 {
-    partial class SlimAtpClientImpl
+    GraphOperation<JsonDocument?> ISlimAtpMachineClient.GetMachineAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options, CancellationToken cancellationToken)
     {
-        async Task<JsonDocument?> ISlimAtpMachineClient.GetMachineAsync(IAzureTenant tenant, string id, ScalarRequestOptions? options, CancellationToken cancellationToken)
-        {
-            var link = BuildLink(options, $"machines/{id}");
+        var link = BuildLink(options, $"machines/{id}");
 
-            return await GetAsync(tenant, link, new InvokeRequestOptions(), cancellationToken).ConfigureAwait(false);
-        }
+        return new(this, tenant, HttpMethod.Get, link, options, default, static doc => doc);
+    }
 
+    GraphArrayOperation<JsonDocument> ISlimAtpMachineClient.GetMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, CancellationToken cancellationToken)
+    {
+        var nextLink = BuildLink(options, "machines");
 
-        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachinesAsync(IAzureTenant tenant, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            var nextLink = BuildLink(options, "machines");
+        return new(this, tenant, HttpMethod.Get, nextLink, options, default, static doc => doc);
+    }
 
-            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
+    GraphArrayOperation<JsonDocument> ISlimAtpMachineClient.GetMachineLogOnUsersAsync(IAzureTenant tenant, string id, ListRequestOptions? options, CancellationToken cancellationToken)
+    {
+        var nextLink = BuildLink(options, $"machines/{id}/logonusers");
 
-                yield return item;
-            }
-        }
+        return new(this, tenant, HttpMethod.Get, nextLink, options, default, static doc => doc);
+    }
 
-        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineLogOnUsersAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            var nextLink = BuildLink(options, $"machines/{id}/logonusers");
+    GraphArrayOperation<JsonDocument> ISlimAtpMachineClient.GetMachineSoftwareAsync(IAzureTenant tenant, string id, ListRequestOptions? options, CancellationToken cancellationToken)
+    {
+        var nextLink = BuildLink(options, $"machines/{id}/software");
 
-            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
+        return new(this, tenant, HttpMethod.Get, nextLink, options, default, static doc => doc);
+    }
 
-                yield return item;
-            }
-        }
+    GraphArrayOperation<JsonDocument> ISlimAtpMachineClient.GetMachineRecommendationsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, CancellationToken cancellationToken)
+    {
+        var nextLink = BuildLink(options, $"machines/{id}/recommendations");
 
-        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineSoftwareAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            var nextLink = BuildLink(options, $"machines/{id}/software");
+        return new(this, tenant, HttpMethod.Get, nextLink, options, default, static doc => doc);
+    }
 
-            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
+    GraphArrayOperation<JsonDocument> ISlimAtpMachineClient.GetMachineAlertsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, CancellationToken cancellationToken)
+    {
+        var nextLink = BuildLink(options, $"machines/{id}/alerts");
 
-                yield return item;
-            }
-        }
+        return new(this, tenant, HttpMethod.Get, nextLink, options, default, static doc => doc);
+    }
 
-        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineRecommendationsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            var nextLink = BuildLink(options, $"machines/{id}/recommendations");
+    GraphArrayOperation<JsonDocument> ISlimAtpMachineClient.GetMachineVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, CancellationToken cancellationToken)
+    {
+        var nextLink = BuildLink(options, $"machines/{id}/vulnerabilities");
 
-            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
-
-                yield return item;
-            }
-        }
-
-        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineAlertsAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            var nextLink = BuildLink(options, $"machines/{id}/alerts");
-
-            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
-
-                yield return item;
-            }
-        }
-
-        async IAsyncEnumerable<JsonDocument> ISlimAtpMachineClient.ListMachineVulnerabilitiesAsync(IAzureTenant tenant, string id, ListRequestOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            var nextLink = BuildLink(options, $"machines/{id}/vulnerabilities");
-
-            await foreach (var item in GetArrayAsync(tenant, nextLink, options, cancellationToken))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    yield break;
-
-                yield return item;
-            }
-        }
+        return new(this, tenant, HttpMethod.Get, nextLink, options, default, static doc => doc);
     }
 }

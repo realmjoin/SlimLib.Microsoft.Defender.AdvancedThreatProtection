@@ -1,20 +1,24 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using SlimLib.Auth.Azure;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection
+namespace SlimLib.Microsoft.Defender.AdvancedThreatProtection;
+
+public class SlimAtpClient : ISlimAtpClient
 {
-    public class SlimAtpClient : ISlimAtpClient
+    private readonly SlimAtpClientImpl impl;
+
+    public SlimAtpClient(IAuthenticationProvider authenticationProvider, HttpClient httpClient, ILogger<SlimAtpClient> logger)
     {
-        private readonly SlimAtpClientImpl impl;
-
-        public SlimAtpClient(IAuthenticationProvider authenticationProvider, HttpClient httpClient, ILogger<SlimAtpClient> logger)
-        {
-            impl = new SlimAtpClientImpl(authenticationProvider, httpClient, logger);
-        }
-
-        public ISlimAtpMachineClient Machine => impl;
-        public ISlimAtpUserClient User => impl;
-        public ISlimAtpSoftwareClient Software => impl;
+        impl = new SlimAtpClientImpl(authenticationProvider, httpClient, logger);
     }
+
+    public ISlimAtpMachineClient Machine => impl;
+    public ISlimAtpUserClient User => impl;
+    public ISlimAtpSoftwareClient Software => impl;
+
+    public Task BatchRequestAsync(IAzureTenant tenant, IList<GraphOperation> operations, CancellationToken cancellationToken = default) => impl.BatchRequestAsync(tenant, operations, cancellationToken);
 }
