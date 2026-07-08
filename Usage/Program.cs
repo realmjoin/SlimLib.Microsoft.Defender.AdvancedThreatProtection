@@ -54,13 +54,21 @@ namespace Usage
                 var options = new ListRequestOptions() { MaxPageSize = 2, Top = 4 };
 
                 var count = 0;
-                await foreach (var item in client.Machine.ListMachinesAsync(tenant, options).AsJsonElementsAsync())
+                await foreach (var page in client.Machine.ListMachinesAsync(tenant, options))
                 {
-                    count++;
+                    using (page)
+                    {
+                        foreach (var item in page.RootElement.GetProperty("value").EnumerateArray())
+                        {
+                            count++;
 
-                    // MaxPageSize = 2 is set, each page will have at most 2 items.
-                    // Top = 4 is set, the server SHOULD stop after 2 pages.
-                    logger.LogInformation("Got item {count}: {json}", count, item.GetRawText());
+                            // MaxPageSize = 2 is set, each page will have at most 2 items.
+                            // Top = 4 is set, the server SHOULD stop after 2 pages.
+                            logger.LogInformation("Got item {count}: {json}", count, item.GetRawText());
+                            if (count >= options.Top) break;
+                        }
+                    }
+
                     if (count >= options.Top) break;
                 }
             }
